@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>天氣診斷分析 - 氣象系統</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            margin: 0;
+            background-color: #e6eff7; /* 淺藍色背景，還原設計圖 */
+            overflow-x: hidden;
+        }
+
+        /* 診斷頁面容器 */
+        .diagnosis-container {
+            width: 100%;
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .img-placeholder {
+            background-color: #ffffff;
+            border: 1px solid #d1d5db;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #9ca3af;
+            font-weight: bold;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+        }
+
+        .img-placeholder:hover {
+            border-color: #1e3a5f;
+            box-shadow: 0 4px 12px rgba(30, 58, 95, 0.1);
+        }
+
+        .control-btn {
+            background-color: #6d8db4;
+            color: white;
+            padding: 0.6rem 2.5rem;
+            border-radius: 9999px;
+            font-weight: bold;
+            transition: all 0.2s;
+            cursor: pointer;
+            border: none;
+        }
+
+        .control-btn:hover {
+            background-color: #1e3a5f;
+            transform: translateY(-2px);
+        }
+
+        /* 標題裝飾 */
+        .title-badge {
+            background-color: #1e3a5f;
+            color: white;
+            padding: 0.75rem 2rem;
+            border-radius: 8px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            display: inline-block;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="diagnosis-container">
+        <!-- 頂部資訊欄 -->
+        <div class="flex justify-between items-start mb-10">
+            <div class="flex flex-col space-y-3">
+                <!-- 左上角藍色標題盒 -->
+                <div class="title-badge">
+                    天氣診斷分析
+                </div>
+                <!-- 現在時間顯示 -->
+                <div id="current-time" class="text-[#1e3a5f] text-xl font-bold tracking-wider">
+                    現在時間：載入中...
+                </div>
+            </div>
+
+            <!-- 模擬返回按鈕 (回到首頁) -->
+            <button class="text-gray-500 hover:text-[#1e3a5f] font-bold border-b border-transparent hover:border-[#1e3a5f] transition-all">
+                返回主選單
+            </button>
+        </div>
+
+        <!-- 圖片配置網格 (12欄位佈局) -->
+        <div class="grid grid-cols-12 gap-8">
+
+            <!-- 左側區域：佔 4/12 寬度 (雷達回波圖) -->
+            <div class="col-span-12 lg:col-span-4 flex flex-col items-center">
+                <div class="img-placeholder w-full aspect-square mb-6 bg-white">
+                    <div class="text-center">
+                        <div class="text-4xl mb-2">📡</div>
+                        <p>[預留圖 1]<br>雷達回波圖 / 衛星雲圖區</p>
+                    </div>
+                </div>
+                <!-- 控制按鈕 -->
+                <div class="flex space-x-8 w-full justify-center">
+                    <button class="control-btn shadow-md">上一張</button>
+                    <button class="control-btn shadow-md">下一張</button>
+                </div>
+            </div>
+
+            <!-- 右側區域：佔 8/12 寬度 (天氣圖與縮圖) -->
+            <div class="col-span-12 lg:col-span-8 flex flex-col space-y-8">
+                <!-- 預留圖 2: 地面天氣分析圖 (主圖區) -->
+                <div class="img-placeholder w-full h-[480px] bg-white">
+                    <div class="text-center">
+                        <div class="text-5xl mb-3">🗺️</div>
+                        <p class="text-xl font-bold">[預留圖 2] 地面天氣分析圖主區</p>
+                    </div>
+                </div>
+
+                <!-- 下方三張縮圖 -->
+                <div class="grid grid-cols-3 gap-6">
+                    <div class="img-placeholder aspect-video bg-white">
+                        <span class="text-sm">[預留圖 3] 數據場</span>
+                    </div>
+                    <div class="img-placeholder aspect-video bg-white">
+                        <span class="text-sm">[預留圖 4] 預報場</span>
+                    </div>
+                    <div class="img-placeholder aspect-video bg-white">
+                        <span class="text-sm">[預留圖 5] 參考圖</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        /**
+         * 即時更新時間 (格式: 2026.02.01 19:15:30)
+         */
+        function updateTime() {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+
+            const timeStr = `現在時間：${year}.${month}.${day} ${hours}:${minutes}:${seconds}`;
+            const timeEl = document.getElementById('current-time');
+            if (timeEl) {
+                timeEl.innerText = timeStr;
+            }
+        }
+
+        // 初始化
+        window.onload = function() {
+            setInterval(updateTime, 1000);
+            updateTime();
+        };
+    </script>
+</body>
+</html>
